@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}PokéTracker{{end}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    {{block "head" .}}{{end}}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="/">PokéTracker</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Accueil</a></li>
+                    <li><a href="/cards">Cartes</a></li>
+                    <li><a href="/sets">Collections</a></li>
+                    <li><a href="/favorites">Favoris</a></li>
+                    <li><a href="/about">À propos</a></li>
+                </ul>
+            </nav>
+            <form action="/search" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Rechercher des cartes..." required>
+                <button type="submit">Rechercher</button>
+            </form>
+        </div>
+    </header>
+    
+    <main class="container">
+        {{block "content" .}}{{end}}
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PokéTracker - Créé pour le projet Groupie Tracker</p>
+        </div>
+    </footer>
+    
+    {{block "scripts" .}}{{end}}
+</body>
+</html>

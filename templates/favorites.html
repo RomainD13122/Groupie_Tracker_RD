@@ -1,0 +1,77 @@
+{{template "base.html" .}}
+
+{{define "title"}}Mes Favoris - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <h2>Mes Cartes Favorites</h2>
+</div>
+
+{{if .Cards}}
+<div class="favorites-controls">
+    <p>Vous avez {{len .Cards}} cartes en favoris</p>
+</div>
+
+<div class="card-grid fade-in">
+    {{range .Cards}}
+    <div class="card favorite-card">
+        <a href="/card/{{.ID}}">
+            <img src="{{.Image}}" alt="{{.Name}}">
+            <div class="card-content">
+                <h3>{{.Name}}</h3>
+                <p>{{.Set.Name}}</p>
+                {{if .Types}}
+                <div class="card-types">
+                    {{range .Types}}
+                    <span class="type {{.}}">{{.}}</span>
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </a>
+        <button class="remove-favorite" data-id="{{.ID}}">Retirer</button>
+    </div>
+    {{end}}
+</div>
+
+<div class="favorites-actions">
+    <button id="clear-favorites" class="button">Vider ma liste de favoris</button>
+</div>
+{{else}}
+<div class="no-favorites">
+    <p>Vous n'avez pas encore de cartes favorites.</p>
+    <p>Parcourez les <a href="/cards">cartes</a> et ajoutez-en à vos favoris.</p>
+</div>
+{{end}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Remove individual favorite
+        document.querySelectorAll('.remove-favorite').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const cardId = this.getAttribute('data-id');
+                fetch('/api/favorite/remove/' + cardId)
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+            });
+        });
+        
+        const clearButton = document.getElementById('clear-favorites');
+        if (clearButton) {
+            clearButton.addEventListener('click', function() {
+                if (confirm('Êtes-vous sûr de vouloir supprimer toutes vos cartes favorites ?')) {
+                    document.querySelectorAll('.remove-favorite').forEach(button => {
+                        const cardId = button.getAttribute('data-id');
+                        fetch('/api/favorite/remove/' + cardId);
+                    });
+                    window.location.reload();
+                }
+            });
+        }
+    });
+</script>
+{{end}}

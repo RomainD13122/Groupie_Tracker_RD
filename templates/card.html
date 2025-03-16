@@ -1,0 +1,108 @@
+{{template "base.html" .}}
+
+{{define "title"}}{{.Card.Name}} - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="card-detail fade-in">
+    <div class="card-image">
+        <img src="{{.Card.Image}}" alt="{{.Card.Name}}">
+        
+        <div class="favorite-controls">
+            {{if .IsFavorite}}
+            <button id="remove-favorite" data-id="{{.Card.ID}}" class="button">Retirer des Favoris</button>
+            {{else}}
+            <button id="add-favorite" data-id="{{.Card.ID}}" class="button">Ajouter aux Favoris</button>
+            {{end}}
+        </div>
+    </div>
+    
+    <div class="card-info">
+        <h2>{{.Card.Name}}</h2>
+        
+        <div class="card-meta">
+            {{if .Card.Set.Name}}
+            <p><strong>Collection:</strong> <a href="/set/{{.Card.Set.ID}}">{{.Card.Set.Name}}</a></p>
+            {{end}}
+            
+            {{if .Card.Number}}
+            <p><strong>Numéro:</strong> {{.Card.Number}}</p>
+            {{end}}
+            
+            {{if .Card.Rarity}}
+            <p><strong>Rareté:</strong> {{.Card.Rarity}}</p>
+            {{end}}
+            
+            {{if .Card.HP}}
+            <p><strong>HP:</strong> {{.Card.HP}}</p>
+            {{end}}
+            
+            {{if .Card.Types}}
+            <p><strong>Types:</strong>
+                <div class="type-list">
+                {{range .Card.Types}}
+                <span class="type {{.}}">{{.}}</span>
+                {{end}}
+                </div>
+            </p>
+            {{end}}
+            
+            {{if .Card.Artist}}
+            <p><strong>Illustrateur:</strong> {{.Card.Artist}}</p>
+            {{else if .Card.Illustrator}}
+            <p><strong>Illustrateur:</strong> {{.Card.Illustrator}}</p>
+            {{end}}
+            
+            {{if .Card.Category}}
+            <p><strong>Catégorie:</strong> {{.Card.Category}}</p>
+            {{end}}
+            
+            {{if .Card.RegulationMark}}
+            <p><strong>Régulation:</strong> {{.Card.RegulationMark}}</p>
+            {{end}}
+        </div>
+        
+        {{if .Card.Description}}
+        <div class="card-description">
+            <h3>Description</h3>
+            <p>{{.Card.Description}}</p>
+        </div>
+        {{end}}
+        
+        <div class="card-actions">
+            <a href="/cards" class="button secondary">Retour aux Cartes</a>
+            <a href="/set/{{.Card.Set.ID}}" class="button">Voir la Collection</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addButton = document.getElementById('add-favorite');
+        const removeButton = document.getElementById('remove-favorite');
+        
+        if (addButton) {
+            addButton.addEventListener('click', function() {
+                const cardId = this.getAttribute('data-id');
+                fetch('/api/favorite/add/' + cardId)
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+            });
+        }
+        
+        if (removeButton) {
+            removeButton.addEventListener('click', function() {
+                const cardId = this.getAttribute('data-id');
+                fetch('/api/favorite/remove/' + cardId)
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+            });
+        }
+    });
+</script>
+{{end}}

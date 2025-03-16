@@ -1,0 +1,75 @@
+{{template "base.html" .}}
+
+{{define "title"}}{{.Set.Name}} - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="set-detail">
+    <div class="set-header">
+        <div class="set-logo">
+            {{if .Set.Logo}}
+            <img src="{{.Set.Logo}}" alt="{{.Set.Name}}">
+            {{else if .Set.Symbol}}
+            <img src="{{.Set.Symbol}}" alt="{{.Set.Name}}">
+            {{else}}
+            <div class="no-image">{{.Set.Name}}</div>
+            {{end}}
+        </div>
+        <div class="set-info">
+            <h2>{{.Set.Name}}</h2>
+            {{if .Set.CardCount.Total}}
+            <p><strong>Nombre de cartes:</strong> {{.Set.CardCount.Total}}</p>
+            {{end}}
+            {{if .Set.ReleaseDate}}
+            <p><strong>Date de sortie:</strong> {{.Set.ReleaseDate}}</p>
+            {{end}}
+            
+            {{if or .Set.Legal.Standard .Set.Legal.Expanded .Set.Legal.Unlimited}}
+            <div class="set-legality">
+                <p><strong>Légalité:</strong></p>
+                <ul>
+                    {{if .Set.Legal.Standard}}
+                    <li>Standard</li>
+                    {{end}}
+                    {{if .Set.Legal.Expanded}}
+                    <li>Expanded</li>
+                    {{end}}
+                    {{if .Set.Legal.Unlimited}}
+                    <li>Unlimited</li>
+                    {{end}}
+                </ul>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    
+    <div class="set-cards">
+        <h3>Cartes de cette collection</h3>
+        <div class="card-grid fade-in">
+            {{range .Cards}}
+            <div class="card">
+                <a href="/card/{{.ID}}">
+                    <img src="{{.Image}}" alt="{{.Name}}">
+                    <div class="card-content">
+                        <h4>{{.Name}}</h4>
+                        <p>{{.Number}}</p>
+                        {{if .Types}}
+                        <div class="card-types">
+                            {{range .Types}}
+                            <span class="type {{.}}">{{.}}</span>
+                            {{end}}
+                        </div>
+                        {{end}}
+                    </div>
+                </a>
+            </div>
+            {{else}}
+            <p class="no-results">Aucune carte n'a pu être chargée pour cette collection.</p>
+            {{end}}
+        </div>
+    </div>
+    
+    <div class="set-actions">
+        <a href="/sets" class="button">Retour aux Collections</a>
+    </div>
+</div>
+{{end}}

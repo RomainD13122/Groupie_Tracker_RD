@@ -1,0 +1,149 @@
+{{template "base.html" .}}
+
+{{define "title"}}Cartes - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <h2>Cartes Pokémon</h2>
+    <div class="results-count">
+        <p>{{.Total}} cartes trouvées</p>
+        {{if .Error}}
+        <p class="error-message">{{.Error}}</p>
+        {{end}}
+    </div>
+</div>
+
+<div id="loading" class="loading-indicator" style="display: none;">
+    <div class="spinner"></div>
+    <p>Chargement en cours...</p>
+</div>
+
+<div class="filters">
+    <form action="/cards" method="GET" id="filters-form">
+        <input type="hidden" name="page" value="1">
+        <input type="hidden" name="limit" value="{{.Limit}}">
+        
+        <div class="filter-group">
+            <label for="type">Type:</label>
+            <select name="type" id="type">
+                <option value="">Tous les Types</option>
+                {{range .Types}}
+                <option value="{{.}}" {{if eq . (index $.Filters "type")}}selected{{end}}>{{.}}</option>
+                {{end}}
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="rarity">Rareté:</label>
+            <select name="rarity" id="rarity">
+                <option value="">Toutes les Raretés</option>
+                {{range .Rarities}}
+                <option value="{{.}}" {{if eq . (index $.Filters "rarity")}}selected{{end}}>{{.}}</option>
+                {{end}}
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="set">Collection:</label>
+            <select name="set" id="set">
+                <option value="">Toutes les Collections</option>
+                {{range .Sets}}
+                <option value="{{.ID}}" {{if eq .ID (index $.Filters "set")}}selected{{end}}>{{.Name}}</option>
+                {{end}}
+            </select>
+        </div>
+        
+        <button type="submit" class="button">Appliquer les Filtres</button>
+        <a href="/cards" class="button secondary">Réinitialiser</a>
+    </form>
+    
+    <div class="pagination-controls">
+        <label for="limit">Cartes par page:</label>
+        <select name="limit" id="limit" onchange="updateLimit(this.value)">
+            <option value="10" {{if eq .Limit 10}}selected{{end}}>10</option>
+            <option value="20" {{if eq .Limit 20}}selected{{end}}>20</option>
+            <option value="30" {{if eq .Limit 30}}selected{{end}}>30</option>
+        </select>
+    </div>
+</div>
+
+<div class="card-grid fade-in">
+    {{range .Cards}}
+    <div class="card">
+        <a href="/card/{{.ID}}">
+            <img src="{{.Image}}" alt="{{.Name}}">
+            <div class="card-content">
+                <h3>{{.Name}}</h3>
+                <p>{{.Set.Name}}</p>
+                {{if .Types}}
+                <div class="card-types">
+                    {{range .Types}}
+                    <span class="type {{.}}">{{.}}</span>
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </a>
+    </div>
+    {{else}}
+    <p class="no-results">Aucune carte ne correspond à vos critères. Essayez de modifier vos filtres.</p>
+    {{end}}
+</div>
+
+<div class="pagination">
+    {{with .Pagination}}
+    <div class="pagination-info">
+        Page {{.CurrentPage}} sur {{.TotalPages}}
+    </div>
+    
+    <div class="pagination-buttons">
+        {{if .HasPrev}}
+        <a href="{{buildURL "/cards" $.Filters "page" (sub .CurrentPage 1) "limit" $.Limit}}" class="button">&laquo; Précédent</a>
+        {{else}}
+        <span class="button disabled">&laquo; Précédent</span>
+        {{end}}
+        
+        {{if .HasNext}}
+        <a href="{{buildURL "/cards" $.Filters "page" (add .CurrentPage 1) "limit" $.Limit}}" class="button">Suivant &raquo;</a>
+        {{else}}
+        <span class="button disabled">Suivant &raquo;</span>
+        {{end}}
+    </div>
+    {{end}}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+       
+        function updateLimit(limit) {
+            const form = document.getElementById('filters-form');
+            form.elements.limit.value = limit;
+            showLoading();
+            form.submit();
+        }
+        
+        
+        window.updateLimit = updateLimit;
+        
+        
+        const form = document.getElementById('filters-form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                showLoading();
+            });
+        }
+        
+        
+        document.querySelectorAll('.pagination-buttons a').forEach(link => {
+            link.addEventListener('click', function() {
+                showLoading();
+            });
+        });
+        
+     
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+    });
+</script>
+{{end}}

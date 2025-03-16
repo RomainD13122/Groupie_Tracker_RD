@@ -1,0 +1,44 @@
+{{template "base.html" .}}
+
+{{define "title"}}Recherche: {{.Query}} - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <h2>Résultats de recherche pour "{{.Query}}"</h2>
+    <div class="results-count">
+        <p>{{.Count}} cartes trouvées</p>
+    </div>
+</div>
+
+{{if .Cards}}
+<div class="card-grid fade-in">
+    {{range .Cards}}
+    <div class="card">
+        <a href="/card/{{.ID}}">
+            <img src="{{.Image}}" alt="{{.Name}}">
+            <div class="card-content">
+                <h3>{{.Name}}</h3>
+                <p>{{.Set.Name}}</p>
+                {{if .Types}}
+                <div class="card-types">
+                    {{range .Types}}
+                    <span class="type {{.}}">{{.}}</span>
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </a>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<div class="no-results">
+    <p>Aucune carte ne correspond à votre recherche "{{.Query}}".</p>
+    <p>Essayez avec d'autres termes ou <a href="/cards">consultez toutes les cartes</a>.</p>
+</div>
+{{end}}
+
+<div class="search-actions">
+    <a href="/cards" class="button">Retour aux Cartes</a>
+</div>
+{{end}}

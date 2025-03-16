@@ -1,0 +1,19 @@
+{{template "base.html" .}}
+
+{{define "title"}}Erreur - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="error-container">
+    <h2>Une erreur est survenue</h2>
+    <div class="error-message">
+        <p>{{.Message}}</p>
+        {{if .Error}}
+        <p class="error-details">Détails: {{.Error}}</p>
+        {{end}}
+    </div>
+    
+    <div class="error-actions">
+        <a href="/" class="button">Retour à l'accueil</a>
+    </div>
+</div>
+{{end}}

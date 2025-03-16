@@ -1,0 +1,532 @@
+{{template "base.html" .}}
+
+{{define "title"}}À propos - PokéTracker{{end}}
+
+{{define "head"}}
+<style>
+    .about-content {
+        background-color: var(--white);
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .about-content section {
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .about-content h3 {
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 2px solid var(--primary-light);
+        display: inline-block;
+    }
+    
+    .faq-item {
+        margin-bottom: var(--spacing-md);
+        background-color: rgba(0, 0, 0, 0.02);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+    
+    .faq-item h4 {
+        padding: var(--spacing-md);
+        margin: 0;
+        background-color: rgba(0, 0, 0, 0.03);
+        cursor: pointer;
+        position: relative;
+        transition: all var(--transition-fast);
+    }
+    
+    .faq-item h4:after {
+        content: '+';
+        position: absolute;
+        right: var(--spacing-md);
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        transition: all var(--transition-fast);
+    }
+    
+    .faq-item h4.active:after {
+        content: '−';
+    }
+    
+    .faq-item h4:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .faq-answer {
+        padding: var(--spacing-md);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .faq-answer p, .faq-answer ul, .faq-answer ol {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .faq-answer ul, .faq-answer ol {
+        padding-left: var(--spacing-lg);
+    }
+    
+    .faq-answer li {
+        margin-bottom: var(--spacing-xs);
+        display: list-item;
+    }
+    
+    .faq-answer ul li {
+        list-style-type: disc;
+    }
+    
+    .faq-answer ol li {
+        list-style-type: decimal;
+    }
+    
+    .tech-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-md);
+    }
+    
+    .tech-item {
+        background-color: var(--white);
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .endpoint-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: var(--spacing-md);
+    }
+    
+    .endpoint-table th, .endpoint-table td {
+        padding: var(--spacing-sm);
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .endpoint-table th {
+        background-color: var(--secondary-light);
+        color: white;
+    }
+    
+    .endpoint-table tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    .timeline {
+        position: relative;
+        margin: var(--spacing-xl) 0;
+        padding-left: 40px;
+    }
+    
+    .timeline:before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--primary-light);
+    }
+    
+    .timeline-item {
+        position: relative;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: -40px;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        border: 3px solid var(--white);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .timeline-item h4 {
+        margin-bottom: var(--spacing-sm);
+        color: var(--primary-dark);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        document.querySelectorAll('.faq-item h4').forEach(item => {
+            item.addEventListener('click', function() {
+                
+                this.classList.toggle('active');
+                
+                
+                const answer = this.nextElementSibling;
+                if (answer.style.display === 'none' || !answer.style.display) {
+                    answer.style.display = 'block';
+                } else {
+                    answer.style.display = 'none';
+                }
+            });
+        });
+        
+        
+        document.querySelectorAll('.faq-answer').forEach(answer => {
+            answer.style.display = 'none';
+        });
+    });
+</script>
+{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <h2>À propos de PokéTracker</h2>
+</div>
+
+<div class="about-content">
+    <section>
+        <h3>Présentation du projet</h3>
+        <p>PokéTracker est une application web permettant d'explorer et de suivre les cartes Pokémon. Cette application a été développée dans le cadre du projet "Groupie Tracker" pour démontrer l'utilisation d'une API REST et l'implémentation de fonctionnalités web essentielles en Go.</p>
+        <p>Grâce à PokéTracker, les utilisateurs peuvent explorer des milliers de cartes Pokémon, rechercher, filtrer et ajouter leurs cartes préférées à leur liste de favoris. L'application utilise l'API TCGdex pour récupérer les informations sur les cartes et les collections.</p>
+    </section>
+    
+    <section>
+        <h3>Fonctionnalités principales</h3>
+        <div class="tech-list">
+            <div class="tech-item">
+                <i class="fas fa-search"></i>
+                <span>Recherche de cartes par nom</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-filter"></i>
+                <span>Filtrage par type, rareté et collection</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-list"></i>
+                <span>Pagination des résultats</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-heart"></i>
+                <span>Gestion des cartes favorites</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-th"></i>
+                <span>Exploration des collections</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-info-circle"></i>
+                <span>Détails des cartes</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="faq">
+        <h3>FAQ sur la gestion du projet</h3>
+        
+        <div class="faq-item">
+            <h4>Comment avez-vous décomposé le projet ? Quelles ont été les phases clé ?</h4>
+            <div class="faq-answer">
+                <p>Le projet a été structuré en plusieurs phases distinctes pour assurer une progression méthodique :</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Phase 1 : Recherche et planification (3 jours)</h4>
+                        <p>J'ai commencé par explorer différentes API liées aux cartes Pokémon et j'ai finalement choisi l'API TCGdex pour sa richesse en données et sa documentation. J'ai analysé sa structure, ses endpoints et les formats de données qu'elle renvoie. Cette phase a également inclus la conception de l'architecture globale de l'application et la définition des modèles de données nécessaires.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4>Phase 2 : Développement du backend (5 jours)</h4>
+                        <p>J'ai implémenté les fonctions Go pour communiquer avec l'API, gérer les erreurs et traiter les données. Cette phase incluait:</p>
+                        <ul>
+                            <li>Création des structures de données pour représenter les cartes et les collections</li>
+                            <li>Implémentation des fonctions pour récupérer et traiter les données de l'API</li>
+                            <li>Mise en place du système de gestion des favoris avec persistance locale</li>
+                            <li>Gestion des erreurs et mise en place de solutions de secours en cas d'indisponibilité de l'API</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4>Phase 3 : Développement du frontend (4 jours)</h4>
+                        <p>J'ai créé les templates HTML et les styles CSS pour présenter les données de manière attrayante et responsive:</p>
+                        <ul>
+                            <li>Conception de l'interface utilisateur avec un accent sur l'expérience utilisateur</li>
+                            <li>Création des templates pour chaque page (accueil, liste des cartes, détails, etc.)</li>
+                            <li>Développement du CSS pour un design moderne et adaptatif</li>
+                            <li>Intégration de fonctionnalités JavaScript minimales pour améliorer l'interactivité</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4>Phase 4 : Implémentation des fonctionnalités clés (4 jours)</h4>
+                        <p>J'ai implémenté les quatre fonctionnalités principales demandées:</p>
+                        <ul>
+                            <li>Système de recherche par nom de carte</li>
+                            <li>Système de filtrage par type, rareté et collection</li>
+                            <li>Pagination des résultats avec options de nombre d'éléments par page</li>
+                            <li>Gestion des favoris avec sauvegarde dans des fichiers JSON</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4>Phase 5 : Tests et optimisations (3 jours)</h4>
+                        <p>J'ai testé l'application dans différents scénarios pour identifier et corriger les bugs:</p>
+                        <ul>
+                            <li>Tests des différentes fonctionnalités et correction des bugs</li>
+                            <li>Optimisation des performances, notamment pour le chargement des cartes</li>
+                            <li>Amélioration de la gestion des erreurs et des cas limites</li>
+                            <li>Ajout d'une page de diagnostic pour les problèmes d'images</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4>Phase 6 : Documentation et finalisation (2 jours)</h4>
+                        <p>J'ai documenté le code et créé la documentation du projet:</p>
+                        <ul>
+                            <li>Rédaction de commentaires explicatifs dans le code</li>
+                            <li>Création du README avec instructions d'installation et d'utilisation</li>
+                            <li>Développement de cette page "À propos" avec les détails du projet</li>
+                            <li>Révision finale et préparation pour la soumission</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <h4>Comment avez-vous réparti les tâches ? Avez-vous utilisé une stratégie particulière pour organiser le travail ?</h4>
+            <div class="faq-answer">
+                <p>Bien que ce projet soit individuel, j'ai mis en place une organisation structurée pour gérer efficacement le travail :</p>
+                
+                <h5>Méthodologie inspirée d'Agile</h5>
+                <p>J'ai adopté une approche inspirée des méthodologies agiles, en divisant le projet en "sprints" de 2-3 jours avec des objectifs clairs pour chacun :</p>
+                <ul>
+                    <li>Sprint 1 : Mise en place de l'architecture et connexion à l'API</li>
+                    <li>Sprint 2 : Développement des fonctionnalités de base (affichage des cartes et des collections)</li>
+                    <li>Sprint 3 : Implémentation du système de recherche et de filtrage</li>
+                    <li>Sprint 4 : Développement de la pagination et des favoris</li>
+                    <li>Sprint 5 : Finalisation et optimisations</li>
+                </ul>
+                
+                <h5>Outils de gestion</h5>
+                <p>Pour organiser mon travail, j'ai utilisé :</p>
+                <ul>
+                    <li><strong>Git</strong> pour le versionnement du code avec des branches distinctes pour chaque fonctionnalité</li>
+                    <li><strong>Trello</strong> pour suivre les tâches à accomplir avec des listes "À faire", "En cours" et "Terminé"</li>
+                    <li><strong>Postman</strong> pour tester les endpoints de l'API avant de les intégrer au code</li>
+                </ul>
+                
+                <h5>Structure du code</h5>
+                <p>J'ai organisé le code de manière modulaire pour faciliter le développement et la maintenance :</p>
+                <ul>
+                    <li>Séparation claire entre les fonctions de récupération des données (fetchCards, fetchSet, etc.)</li>
+                    <li>Organisation des templates HTML par fonctionnalité</li>
+                    <li>Structure CSS avec variables pour maintenir une cohérence visuelle</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <h4>Comment avez-vous géré votre temps ? Avez-vous défini des priorités ?</h4>
+            <div class="faq-answer">
+                <p>La gestion du temps a été un aspect crucial de ce projet, que j'ai abordé de façon méthodique :</p>
+                
+                <h5>Planning et échéancier</h5>
+                <ul>
+                    <li>J'ai établi un calendrier détaillé avec des jalons hebdomadaires à atteindre</li>
+                    <li>J'ai alloué plus de temps aux étapes critiques comme la communication avec l'API et l'implémentation des fonctionnalités principales</li>
+                    <li>J'ai réservé une période tampon d'environ 20% du temps total pour gérer les imprévus et les difficultés techniques</li>
+                </ul>
+                
+                <h5>Priorisation des tâches</h5>
+                <p>J'ai adopté une approche basée sur les priorités suivantes :</p>
+                <ol>
+                    <li><strong>Priorité 1</strong> : Fonctionnalités essentielles demandées dans le sujet (recherche, filtres, pagination, favoris)</li>
+                    <li><strong>Priorité 2</strong> : Architecture robuste et gestion des erreurs</li>
+                    <li><strong>Priorité 3</strong> : Expérience utilisateur et interface attrayante</li>
+                    <li><strong>Priorité 4</strong> : Fonctionnalités bonus et optimisations</li>
+                </ol>
+                
+                <h5>Technique de travail</h5>
+                <p>Pour maximiser ma productivité, j'ai utilisé :</p>
+                <ul>
+                    <li>La technique Pomodoro (sessions de travail de 25 minutes suivies de pauses de 5 minutes)</li>
+                    <li>Des sessions de "revue de code personnel" en fin de journée pour identifier les améliorations possibles</li>
+                    <li>Un journal de développement pour documenter les problèmes rencontrés et les solutions trouvées</li>
+                </ul>
+                
+                <h5>Gestion des défis</h5>
+                <p>Lorsque j'ai rencontré des obstacles, j'ai mis en place une stratégie de résolution de problèmes :</p>
+                <ol>
+                    <li>Identifier clairement le problème et le documenter</li>
+                    <li>Rechercher des solutions pendant un temps limité (max 1h30)</li>
+                    <li>Si le problème persiste, passer temporairement à une autre tâche</li>
+                    <li>Revenir au problème avec une perspective nouvelle</li>
+                </ol>
+                
+                <p>Cette approche m'a permis de surmonter efficacement les difficultés rencontrées avec l'API, notamment les problèmes liés aux URLs d'images et à la pagination.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <h4>Quelle stratégie avez-vous adoptée pour vous documenter ?</h4>
+            <div class="faq-answer">
+                <p>La documentation a été un élément essentiel tout au long du projet, tant pour l'apprentissage que pour la production :</p>
+                
+                <h5>Documentation de l'API et des technologies</h5>
+                <ul>
+                    <li>J'ai étudié en profondeur la <a href="https://api.tcgdex.net/" target="_blank">documentation de l'API TCGdex</a>, en testant chaque endpoint via Postman</li>
+                    <li>J'ai consulté la documentation officielle de Go, notamment pour les packages <code>html/template</code>, <code>net/http</code> et <code>encoding/json</code></li>
+                    <li>J'ai recherché des bonnes pratiques pour l'implémentation de fonctionnalités comme la pagination et la gestion des favoris en Go</li>
+                </ul>
+                
+                <h5>Veille et ressources</h5>
+                <p>J'ai utilisé diverses ressources pour enrichir mes connaissances :</p>
+                <ul>
+                    <li>Forums spécialisés comme Stack Overflow et Go Forum</li>
+                    <li>Tutoriels et articles sur la création d'applications web en Go</li>
+                    <li>Vidéos explicatives sur les concepts de design responsive et d'UX</li>
+                </ul>
+                
+                <h5>Documentation du code</h5>
+                <p>J'ai mis en place une stratégie de documentation du code selon ces principes :</p>
+                <ul>
+                    <li>Commentaires descriptifs pour chaque fonction expliquant son rôle et son fonctionnement</li>
+                    <li>Documentation des structures de données avec des annotations sur chaque champ</li>
+                    <li>Messages de log détaillés pour faciliter le débogage</li>
+                    <li>Nommage explicite des variables et des fonctions pour une meilleure compréhension</li>
+                </ul>
+                
+                <h5>Documentation du projet</h5>
+                <p>J'ai créé plusieurs documents pour présenter le projet :</p>
+                <ul>
+                    <li>Un README détaillé expliquant l'installation, l'utilisation et l'architecture du projet</li>
+                    <li>Cette page À propos pour expliquer la gestion du projet</li>
+                    <li>Des commentaires dans le code pour faciliter la maintenance future</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <h4>Quels défis avez-vous rencontrés et comment les avez-vous surmontés ?</h4>
+            <div class="faq-answer">
+                <p>Ce projet m'a confronté à plusieurs défis techniques et organisationnels :</p>
+                
+                <h5>Limitation de l'API</h5>
+                <p><strong>Défi :</strong> L'API TCGdex ne propose pas nativement de pagination côté serveur ni de filtrage avancé.</p>
+                <p><strong>Solution :</strong> J'ai implémenté ma propre logique de pagination et de filtrage côté client, en récupérant d'abord toutes les cartes puis en appliquant les filtres et la pagination manuellement. Pour optimiser les performances, j'ai mis en place un système de mise en cache des résultats.</p>
+                
+                <h5>Problèmes d'URLs d'images</h5>
+                <p><strong>Défi :</strong> Certaines URLs d'images renvoyées par l'API n'étaient pas directement utilisables ou complètes.</p>
+                <p><strong>Solution :</strong> J'ai développé une fonction de correction des URLs qui ajoute les extensions manquantes et remplace les images non disponibles par des placeholders. J'ai également créé une page de diagnostic pour vérifier les problèmes d'images.</p>
+                
+                <h5>Gestion des erreurs API</h5>
+                <p><strong>Défi :</strong> L'API pouvait parfois être indisponible ou renvoyer des erreurs.</p>
+                <p><strong>Solution :</strong> J'ai implémenté un système de retry avec backoff exponentiel, ainsi qu'une gestion des erreurs robuste avec des messages explicatifs pour l'utilisateur. J'ai également prévu des listes de secours pour les données essentielles comme les types de cartes.</p>
+                
+                <h5>Responsive design</h5>
+                <p><strong>Défi :</strong> Créer une interface qui s'adapte à tous les types d'appareils.</p>
+                <p><strong>Solution :</strong> J'ai utilisé un système de grille flexible avec CSS Grid et des media queries pour adapter l'affichage selon la taille de l'écran. J'ai testé l'interface sur différents appareils pour assurer une expérience utilisateur optimale partout.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Technologies utilisées</h3>
+        <div class="tech-list">
+            <div class="tech-item">
+                <i class="fas fa-code"></i>
+                <span>Go (backend)</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-html5"></i>
+                <span>HTML (templates)</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-css3-alt"></i>
+                <span>CSS (styles)</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-js"></i>
+                <span>JavaScript (interactivité)</span>
+            </div>
+            <div class="tech-item">
+                <i class="fas fa-server"></i>
+                <span>API TCGdex</span>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>API utilisée</h3>
+        <p><strong>API</strong> : <a href="https://api.tcgdex.net/" target="_blank">TCGdex</a></p>
+        <p>L'API TCGdex fournit des données complètes sur les cartes Pokémon, incluant les informations sur les cartes, les collections, les types et les raretés.</p>
+        
+        <table class="endpoint-table">
+            <thead>
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                    <th>Utilisation dans PokéTracker</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/v2/en/cards</code></td>
+                    <td>Récupération de la liste des cartes</td>
+                    <td>Page des cartes, recherche et filtrage</td>
+                </tr>
+                <tr>
+                    <td><code>/v2/en/cards/{id}</code></td>
+                    <td>Récupération des détails d'une carte</td>
+                    <td>Page de détail d'une carte</td>
+                </tr>
+                <tr>
+                    <td><code>/v2/en/sets</code></td>
+                    <td>Récupération de la liste des collections</td>
+                    <td>Page des collections et options de filtrage</td>
+                </tr>
+                <tr>
+                    <td><code>/v2/en/sets/{id}</code></td>
+                    <td>Récupération des détails d'une collection</td>
+                    <td>Page de détail d'une collection</td>
+                </tr>
+                <tr>
+                    <td><code>/v2/en/types</code></td>
+                    <td>Récupération de la liste des types de cartes</td>
+                    <td>Options de filtrage par type</td>
+                </tr>
+                <tr>
+                    <td><code>/v2/en/rarities</code></td>
+                    <td>Récupération de la liste des raretés de cartes</td>
+                    <td>Options de filtrage par rareté</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    
+    <section>
+        <h3>Conclusion et perspectives</h3>
+        <p>Le développement de PokéTracker a été une expérience enrichissante qui m'a permis de mettre en pratique mes connaissances en Go, HTML/CSS et en conception d'applications web. J'ai pu relever plusieurs défis techniques et développer une application fonctionnelle qui répond aux exigences du projet Groupie Tracker.</p>
+        
+        <p>Pour les évolutions futures, j'envisage d'ajouter :</p>
+        <ul>
+            <li>Un système d'authentification pour personnaliser l'expérience utilisateur</li>
+            <li>Des statistiques avancées sur les collections et les cartes</li>
+            <li>Un système de suivi de prix et de valeur des cartes</li>
+            <li>Une fonctionnalité d'exportation/importation des favoris</li>
+            <li>Une optimisation des performances pour gérer un plus grand volume de données</li>
+        </ul>
+    </section>
+</div>
+{{end}}

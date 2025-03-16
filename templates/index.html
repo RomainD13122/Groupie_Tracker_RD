@@ -1,0 +1,73 @@
+{{template "base.html" .}}
+
+{{define "title"}}Accueil - PokéTracker{{end}}
+
+{{define "content"}}
+<section class="hero fade-in">
+    <h2>Explorez le Monde des Cartes Pokémon</h2>
+    <p>Parcourez des milliers de cartes Pokémon, consultez leurs détails et créez votre propre collection de favoris.</p>
+    <a href="/cards" class="button">Découvrir les cartes</a>
+</section>
+
+<section class="featured">
+    <h2>Cartes à la Une</h2>
+    <div class="card-grid fade-in">
+        {{range .RecentCards}}
+        <div class="card">
+            <a href="/card/{{.ID}}">
+                <img src="{{.Image}}" alt="{{.Name}}">
+                <div class="card-content">
+                    <h3>{{.Name}}</h3>
+                    <p>{{.Set.Name}}</p>
+                    {{if .Types}}
+                    <div class="card-types">
+                        {{range .Types}}
+                        <span class="type {{.}}">{{.}}</span>
+                        {{end}}
+                    </div>
+                    {{end}}
+                </div>
+            </a>
+        </div>
+        {{else}}
+        <p>Aucune carte n'a pu être chargée. Veuillez réessayer plus tard.</p>
+        {{end}}
+    </div>
+    <a href="/cards" class="button">Voir Toutes les Cartes</a>
+</section>
+
+<section class="sets-preview">
+    <h2>Collections</h2>
+    <div class="set-grid fade-in">
+        {{range .Sets}}
+        <div class="set">
+            <a href="/set/{{.ID}}">
+                <div class="set-image">
+                    {{if .Logo}}
+                    <img src="{{.Logo}}" alt="{{.Name}}">
+                    {{else if .Symbol}}
+                    <img src="{{.Symbol}}" alt="{{.Name}}">
+                    {{else}}
+                    <div class="no-image">{{.Name}}</div>
+                    {{end}}
+                </div>
+                <div class="set-info">
+                    <h3>{{.Name}}</h3>
+                    {{if .CardCount.Total}}
+                    <p>{{.CardCount.Total}} cartes</p>
+                    {{else}}
+                    <p>? cartes</p>
+                    {{end}}
+                    {{if .ReleaseDate}}
+                    <p class="release-date">{{.ReleaseDate}}</p>
+                    {{end}}
+                </div>
+            </a>
+        </div>
+        {{else}}
+        <p>Aucune collection n'a pu être chargée. Veuillez réessayer plus tard.</p>
+        {{end}}
+    </div>
+    <a href="/sets" class="button">Voir Toutes les Collections</a>
+</section>
+{{end}}

@@ -1,0 +1,45 @@
+{{template "base.html" .}}
+
+{{define "title"}}Collections - PokéTracker{{end}}
+
+{{define "content"}}
+<div class="page-header">
+    <h2>Collections Pokémon</h2>
+    <p>Découvrez toutes les collections de cartes Pokémon</p>
+    
+    {{if .Error}}
+    <div class="error-message">{{.Error}}</div>
+    {{end}}
+</div>
+
+<div class="set-grid">
+    {{range .Sets}}
+    <div class="set">
+        <a href="/set/{{.ID}}">
+            <div class="set-image">
+                {{if .Logo}}
+                <img src="{{.Logo}}" alt="{{.Name}}">
+                {{else if .Symbol}}
+                <img src="{{.Symbol}}" alt="{{.Name}}">
+                {{else}}
+                <div class="no-image">{{.Name}}</div>
+                {{end}}
+            </div>
+            <div class="set-info">
+                <h3>{{.Name}}</h3>
+                {{if .CardCount.Total}}
+                <p>{{.CardCount.Total}} cartes</p>
+                {{else}}
+                <p>? cartes</p>
+                {{end}}
+                {{if .ReleaseDate}}
+                <p class="release-date">Date de sortie: {{.ReleaseDate}}</p>
+                {{end}}
+            </div>
+        </a>
+    </div>
+    {{else}}
+    <p class="no-results">Aucune collection n'a pu être chargée. Veuillez réessayer plus tard.</p>
+    {{end}}
+</div>
+{{end}}
