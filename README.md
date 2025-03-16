@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PokéTracker
 
 ![PokéTracker Logo](static/img/logo.png)
@@ -128,3 +129,7 @@ Pour contribuer au projet :
 
 - [TCGdex](https://api.tcgdex.net/) pour leur API gratuite et complète
 - Le projet Pokémon pour l'univers et les cartes
+=======
+# Groupie_Tracker_RD
+Groupie Tracker date limite 10/03/2025
+>>>>>>> 475af3ab1473ca17767de9d423d30ac69783e030
